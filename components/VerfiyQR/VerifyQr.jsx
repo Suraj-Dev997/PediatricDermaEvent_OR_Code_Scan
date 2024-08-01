@@ -1,9 +1,18 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Button, TouchableOpacity, Alert, PermissionsAndroid, StyleSheet,Image } from 'react-native';
-import { RNCamera } from 'react-native-camera';
-import { useCameraDevice } from 'react-native-vision-camera';
-import { BASE_URL } from '../Configuration/Config';
-import { useNavigation } from '@react-navigation/native';
+import React, {useState, useEffect, useRef} from 'react';
+import {
+  View,
+  Text,
+  Button,
+  TouchableOpacity,
+  Alert,
+  PermissionsAndroid,
+  StyleSheet,
+  Image,
+} from 'react-native';
+import {RNCamera} from 'react-native-camera';
+import {useCameraDevice} from 'react-native-vision-camera';
+import {BASE_URL} from '../Configuration/Config';
+import {useNavigation} from '@react-navigation/native';
 
 const VerifyQr = () => {
   const navigation = useNavigation();
@@ -15,7 +24,7 @@ const VerifyQr = () => {
   useEffect(() => {
     requestCameraPermission();
     requestAudioPermission();
-    console.log("useEffect run");
+    console.log('useEffect run');
   }, []);
 
   const requestCameraPermission = async () => {
@@ -24,7 +33,8 @@ const VerifyQr = () => {
         PermissionsAndroid.PERMISSIONS.CAMERA,
         {
           title: 'Cool App Camera Permission',
-          message: 'Cool Photo App needs access to your camera so you can take awesome pictures.',
+          message:
+            'Cool Photo App needs access to your camera so you can take awesome pictures.',
           buttonNeutral: 'Ask Me Later',
           buttonNegative: 'Cancel',
           buttonPositive: 'OK',
@@ -45,7 +55,8 @@ const VerifyQr = () => {
         PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
         {
           title: 'Cool App AUDIO Permission',
-          message: 'Cool Photo App needs access to your audio so you can take awesome pictures.',
+          message:
+            'Cool Photo App needs access to your audio so you can take awesome pictures.',
           buttonNeutral: 'Ask Me Later',
           buttonNegative: 'Cancel',
           buttonPositive: 'OK',
@@ -61,46 +72,165 @@ const VerifyQr = () => {
     }
   };
 
-  const onBarCodeRead = async (event) => {
+  // const onBarCodeRead = async event => {
+  //   if (!scanningEnabled) return;
+  //   console.log('QR Code data:', event.data);
+  //   const [doctorId, ticketId] = event.data
+  //     .split(',')
+  //     .map(value => value.trim());
+  //   setClickPic(false);
+  //   console.log('Doctor ID:', doctorId);
+  //   console.log('Ticket ID:', ticketId);
+  //   const payload = {
+  //     doctorId: doctorId,
+  //     ticketId: ticketId,
+  //     source: 'verify',
+  //     userId: '800001',
+  //   };
+  //   try {
+  //     const ApiUrl = `${BASE_URL}${'/DoctorApi/VerifyDoctor'}`;
+  //     const response = await fetch(ApiUrl, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(payload),
+  //     });
+
+  //     const data = await response.json();
+  //     console.log('Data:', data);
+  //     if (data.errorCode === '0' || data.errorCode === '3') {
+  //       const doctorDetailApiUrl = `${BASE_URL}${'/DoctorApi/GetDoctorDetail'}`;
+  //       console.log("doc id", doctorId);
+  //       const doctorDetailPayload = {
+  //         doctorId: doctorId,
+  //         searchText: '',
+  //       };
+
+  //       const detailResponse = await fetch(doctorDetailApiUrl, {
+  //         method: 'POST',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //         body: JSON.stringify(doctorDetailPayload),
+  //       });
+
+  //       const doctorDetailData = await detailResponse.json();
+  //       console.log('Doctor Details:', doctorDetailData);
+
+  //       // Extract doctorName and doctorId from responseData
+  //       const doctorName = doctorDetailData.responseData.doctorName || 'N/A';
+  //       const doctorId = doctorDetailData.responseData.doctorId || 'N/A';
+
+  //       const successMessage =
+  //         data.errorCode === '0'
+  //           ? 'Verification done successfully.'
+  //           : 'Already Verified.';
+  //       Alert.alert(
+  //         'Success',
+  //         `${successMessage}\nDoctor Name: ${doctorName}\nDoctor ID: ${doctorId}`,
+  //         [{text: 'OK', onPress: () => setClickPic(false)}],
+  //       );
+  //       // setClickPic(false);
+  //     } else {
+  //       Alert.alert('Error', data.errorDetail, [
+  //         {text: 'OK', onPress: () => setClickPic(false)},
+  //       ]);
+  //       // setClickPic(false);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error:', error);
+  //     Alert.alert('Error', 'An error occurred while verifying QR code', [
+  //       {text: 'OK', onPress: () => setClickPic(false)},
+  //     ]);
+  //     // setClickPic(false);
+  //   }
+  //   setScanningEnabled(false);
+  //   setTimeout(() => setScanningEnabled(true), 2000);
+  //   // setClickPic(false);
+  // };
+
+  const onBarCodeRead = async event => {
     if (!scanningEnabled) return;
+
     console.log('QR Code data:', event.data);
-    const [doctorId, ticketId] = event.data.split(',').map(value => value.trim());
+    const [doctorId, ticketId] = event.data
+      .split(',')
+      .map(value => value.trim());
     setClickPic(false);
     console.log('Doctor ID:', doctorId);
     console.log('Ticket ID:', ticketId);
+
     const payload = {
       doctorId: doctorId,
       ticketId: ticketId,
-      source: "verify",
-      userId: "800001"
+      source: 'verify',
+      userId: '800001',
     };
+
     try {
-      const ApiUrl = `${BASE_URL}${'/DoctorApi/VerifyDoctor'}`;
+      const ApiUrl = `${BASE_URL}/DoctorApi/VerifyDoctor`;
       const response = await fetch(ApiUrl, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       });
-      
+
       const data = await response.json();
-      console.log("Data:",data);
-      if (data.errorCode === "0") {
-        Alert.alert('Success', 'Verification done successfully.', [{ text: 'OK', onPress: () => setClickPic(false) }]);
-        // setClickPic(false);
+      console.log('Data:', data);
+
+      if (data.errorCode === '0' || data.errorCode === '3') {
+        const doctorDetailApiUrl = `${BASE_URL}/DoctorApi/GetDoctorDetail`;
+        console.log('doc id', doctorId);
+
+        const doctorDetailPayload = {
+          doctorId: doctorId,
+          searchText: '',
+        };
+
+        const detailResponse = await fetch(doctorDetailApiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(doctorDetailPayload),
+        });
+
+        const doctorDetailData = await detailResponse.json();
+        console.log('Doctor Details:', doctorDetailData);
+
+        // Extract doctorName and doctorId from responseData
+        const doctorName = doctorDetailData.responseData.doctorName || 'N/A';
+        const doctorDetailId = doctorDetailData.responseData.doctorId || 'N/A'; // Renamed to avoid conflict
+
+        const successMessage =
+          data.errorCode === '0'
+            ? 'Verification done successfully.'
+            : 'Already Verified.';
+
+        const alertMessage = `${successMessage}\n\nDoctor Name: ${doctorName}\nDoctor ID: ${doctorDetailId}`;
+
+        Alert.alert(
+          'Success',
+          alertMessage, // Use doctorDetailId here
+          [{text: 'OK', onPress: () => setClickPic(false)}],
+        );
       } else {
-        Alert.alert('Error', data.errorDetail, [{ text: 'OK', onPress: () => setClickPic(false) }]);
-        // setClickPic(false);
+        Alert.alert('Error', data.errorDetail, [
+          {text: 'OK', onPress: () => setClickPic(false)},
+        ]);
       }
     } catch (error) {
       console.error('Error:', error);
-      Alert.alert('Error', 'An error occurred while verifying QR code', [{ text: 'OK', onPress: () => setClickPic(false) }]);
-      // setClickPic(false);
-    }  
-     setScanningEnabled(false);
+      Alert.alert('Error', 'An error occurred while verifying QR code', [
+        {text: 'OK', onPress: () => setClickPic(false)},
+      ]);
+    }
+
+    setScanningEnabled(false);
     setTimeout(() => setScanningEnabled(true), 2000);
-    // setClickPic(false);
   };
 
   const handleBackButton = () => {
@@ -108,13 +238,13 @@ const VerifyQr = () => {
   };
   useEffect(() => {
     navigation.setOptions({
-      headerShown: !clickPic
+      headerShown: !clickPic,
     });
   }, [clickPic]);
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       {clickPic ? (
-        <View style={{ flex: 1 }}>
+        <View style={{flex: 1}}>
           <RNCamera
             ref={camera}
             style={StyleSheet.absoluteFill}
@@ -123,7 +253,6 @@ const VerifyQr = () => {
             device={device}
             isActive={true}
             captureAudio={false}
-      
           />
           <TouchableOpacity
             style={{
@@ -136,18 +265,21 @@ const VerifyQr = () => {
               borderRadius: 5,
               zIndex: 1,
             }}
-            onPress={handleBackButton}
-          >
-            <Text style={{ color: 'white' }}>Close</Text>
+            onPress={handleBackButton}>
+            <Text style={{color: 'white'}}>Close</Text>
           </TouchableOpacity>
         </View>
       ) : (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
           {/* <Button title="Scan QR" onPress={() => { setClickPic(true); }} /> */}
           <Text style={styles.textstyle}> Click below to scan QR Code</Text>
-          <TouchableOpacity style={styles.imageButton} onPress={() => { setClickPic(true); }} >
-        <Image source={require('./Scan.png')} style={styles.image} />
-      </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.imageButton}
+            onPress={() => {
+              setClickPic(true);
+            }}>
+            <Image source={require('./Scan.png')} style={styles.image} />
+          </TouchableOpacity>
         </View>
       )}
     </View>
@@ -164,17 +296,17 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   image: {
-    backgroundColor:'#ADD8E6',
-    borderRadius:100,
+    backgroundColor: '#ADD8E6',
+    borderRadius: 100,
     width: 150,
     height: 150,
-    marginTop:20
+    marginTop: 20,
   },
-  textstyle:{
-    fontSize:20,
-    fontWeight:'600',
-    color:'#17175f'
-  }
+  textstyle: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#17175f',
+  },
 });
 
 export default VerifyQr;
