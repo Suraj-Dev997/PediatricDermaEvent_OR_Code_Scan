@@ -204,13 +204,16 @@ const VerifyQr = () => {
         // Extract doctorName and doctorId from responseData
         const doctorName = doctorDetailData.responseData.doctorName || 'N/A';
         const doctorDetailId = doctorDetailData.responseData.doctorId || 'N/A'; // Renamed to avoid conflict
+        const registrationCode =
+          doctorDetailData.responseData.registrationCode || 'N/A'; // Renamed to avoid conflict
+        const emailId = doctorDetailData.responseData.emailId || 'N/A'; // Renamed to avoid conflict
 
         const successMessage =
           data.errorCode === '0'
             ? 'Verification done successfully.'
             : 'Already Verified.';
 
-        const alertMessage = `${successMessage}\n\nDoctor Name: ${doctorName}\nDoctor ID: ${doctorDetailId}`;
+        const alertMessage = `${successMessage}\n\nDoctor Name: ${doctorName}\nDoctor ID: ${doctorDetailId}\nRegistration Code: ${registrationCode}\nEmail ID: ${emailId}`;
 
         Alert.alert(
           'Success',
