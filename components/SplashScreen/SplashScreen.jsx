@@ -38,7 +38,7 @@ export const SplashScreen = ({navigation}) => {
     // } else {
     //   navigation.replace('Test');
     // }
-    navigation.replace('VerifyQr');
+    navigation.replace('Login');
   };
 
   return (

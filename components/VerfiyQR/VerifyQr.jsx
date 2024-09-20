@@ -13,6 +13,7 @@ import {RNCamera} from 'react-native-camera';
 import {useCameraDevice} from 'react-native-vision-camera';
 import {BASE_URL} from '../Configuration/Config';
 import {useNavigation} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const VerifyQr = () => {
   const navigation = useNavigation();
@@ -20,6 +21,27 @@ const VerifyQr = () => {
   const device = useCameraDevice('back');
   const camera = useRef(null);
   const [scanningEnabled, setScanningEnabled] = useState(true);
+
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const storedData = await AsyncStorage.getItem('userdata');
+        if (storedData !== null) {
+          // If the data exists, parse it back into JSON
+          setUserData(JSON.parse(storedData));
+        }
+      } catch (error) {
+        console.error('Failed to fetch user data', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  const resdata = userData.responseData;
+  console.log('userid', resdata.userId);
 
   useEffect(() => {
     requestCameraPermission();
@@ -165,7 +187,7 @@ const VerifyQr = () => {
       doctorId: doctorId,
       ticketId: ticketId,
       source: 'verify',
-      userId: '800001',
+      userId: resdata.userId,
     };
 
     try {

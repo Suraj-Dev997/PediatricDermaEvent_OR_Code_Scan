@@ -14,7 +14,7 @@ import {BASE_URL} from '../Configuration/Config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {axios} from 'axios';
 import LinearGradient from 'react-native-linear-gradient';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 export const Login = () => {
   const [EmpCode, setEmpCode] = useState('');
@@ -23,58 +23,59 @@ export const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
 
-  const handleLogin1 = async () => {
-navigation.navigate('Home')
-  }
-  // const handleLogin = async () => {
-  //   setIsLoading(true);
-  //   const ApiUrl = `${BASE_URL}${'/auth/login'}`;
-  //   const response = await fetch(ApiUrl, {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({
-  //       empcode: EmpCode,
-  //       password: Password,
-  //     }),
-  //   });
-  //   console.log(EmpCode);
-  //   console.log(Password);
-  //   const responseData = await response.json();
-
-  //   if (response.ok) {
-  //     // await AsyncStorage.setItem('user', "Suraj");
-  //     const jsonData = JSON.stringify(responseData);
-  //     console.log(jsonData);
-  //     try {
-  //       await AsyncStorage.setItem('userdata', jsonData);
-  //       console.log('Data saved successfully');
-  //       setEmpCode('');
-  //       setPassword('');
-  //     } catch (error) {
-  //       console.log('Error saving data:', error);
-  //     }
-
-  //     // Alert.alert(user);
-  //     // const  isRemember=AsyncStorage.getItem('Name');
-  //     //Alert.alert('Msg', isRemember);
-  //     //console.log(isRemember);
-  //     if (responseData.status == 'SUCCESS') {
-  //       navigation.navigate('Home');
-  //     } else {
-  //       Alert.alert('Error', 'Invalid EmployeeCode or Password');
-  //       console.log(responseData.errorDetail);
-  //     }
-
-  //     console.log(responseData.errorCode);
-  //   } else {
-  //     // errorMessage(responseData.error);
-  //     Alert.alert('Error', 'Error while Login');
-  //     console.log('F');
+  //   const handleLogin1 = async () => {
+  // navigation.navigate('Home')
   //   }
-  //   setIsLoading(false);
-  // };
+  const handleLogin = async () => {
+    setIsLoading(true);
+    const ApiUrl = `${BASE_URL}${'/AccountApi/LoginValidate'}`;
+    const response = await fetch(ApiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        empCode: EmpCode,
+        password: Password,
+        loginTypeField: 'EMPCODE',
+      }),
+    });
+    console.log(EmpCode);
+    console.log(Password);
+    const responseData = await response.json();
+    console.log('responsedata', responseData);
+    if (response.ok) {
+      // await AsyncStorage.setItem('user', "Suraj");
+      const jsonData = JSON.stringify(responseData);
+      console.log(jsonData);
+      try {
+        await AsyncStorage.setItem('userdata', jsonData);
+        console.log('Data saved successfully');
+        setEmpCode('');
+        setPassword('');
+      } catch (error) {
+        console.log('Error saving data:', error);
+      }
+
+      // Alert.alert(user);
+      // const  isRemember=AsyncStorage.getItem('Name');
+      //Alert.alert('Msg', isRemember);
+      //console.log(isRemember);
+      if (responseData.errorCode === '1') {
+        navigation.navigate('VerifyQr');
+      } else {
+        Alert.alert('Error', 'Invalid EmployeeCode or Password');
+        console.log(responseData.errorDetail);
+      }
+
+      console.log(responseData.errorCode);
+    } else {
+      // errorMessage(responseData.error);
+      Alert.alert('Error', 'Error while Login');
+      console.log('F');
+    }
+    setIsLoading(false);
+  };
   return (
     <ImageBackground
       source={require('./Images/Splash4.jpg')}
@@ -106,7 +107,7 @@ navigation.navigate('Home')
           <LinearGradient
             colors={['#005A9C', '#17175f']}
             style={[styles.buttonContainer, styles.elevation]}
-            onTouchStart={handleLogin1}>
+            onTouchStart={handleLogin}>
             <TouchableOpacity>
               <Text style={styles.buttonText}>Login</Text>
             </TouchableOpacity>
