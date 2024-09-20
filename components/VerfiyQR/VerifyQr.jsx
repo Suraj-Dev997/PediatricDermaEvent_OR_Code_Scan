@@ -23,14 +23,17 @@ const VerifyQr = () => {
   const [scanningEnabled, setScanningEnabled] = useState(true);
 
   const [userData, setUserData] = useState(null);
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const storedData = await AsyncStorage.getItem('userdata');
         if (storedData !== null) {
-          // If the data exists, parse it back into JSON
-          setUserData(JSON.parse(storedData));
+          const parsedData = JSON.parse(storedData);
+          // Extract the userId from the responseData object
+          const userIdFromStorage = parsedData.responseData?.userId;
+          setUserId(userIdFromStorage);
         }
       } catch (error) {
         console.error('Failed to fetch user data', error);
@@ -40,13 +43,11 @@ const VerifyQr = () => {
     fetchUserData();
   }, []);
 
-  const resdata = userData.responseData;
-  console.log('userid', resdata.userId);
-
   useEffect(() => {
     requestCameraPermission();
     requestAudioPermission();
     console.log('useEffect run');
+    console.log('User ID:', userId);
   }, []);
 
   const requestCameraPermission = async () => {
@@ -182,13 +183,15 @@ const VerifyQr = () => {
     setClickPic(false);
     console.log('Doctor ID:', doctorId);
     console.log('Ticket ID:', ticketId);
+    console.log('User ID:', userId);
 
     const payload = {
       doctorId: doctorId,
       ticketId: ticketId,
       source: 'verify',
-      userId: resdata.userId,
+      userId: userId,
     };
+    console.log('Payload', payload);
 
     try {
       const ApiUrl = `${BASE_URL}/DoctorApi/VerifyDoctor`;

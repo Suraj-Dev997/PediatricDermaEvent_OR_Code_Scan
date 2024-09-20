@@ -32,13 +32,13 @@ export const SplashScreen = ({navigation}) => {
   });
 
   const handleUser = async () => {
-    // const usertoken = await AsyncStorage.getItem('userdata');
-    // if (!usertoken) {
-    //   navigation.replace('Test');
-    // } else {
-    //   navigation.replace('Test');
-    // }
-    navigation.replace('Login');
+    const usertoken = await AsyncStorage.getItem('userdata');
+    if (!usertoken) {
+      navigation.replace('Login');
+    } else {
+      navigation.replace('VerifyQr');
+    }
+    // navigation.replace('Login');
   };
 
   return (
