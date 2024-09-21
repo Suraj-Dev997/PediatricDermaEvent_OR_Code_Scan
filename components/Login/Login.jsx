@@ -81,7 +81,7 @@ export const Login = () => {
       source={require('./Images/Splash4.jpg')}
       style={styles.backgroundImage}>
       {isLoading ? (
-        <ActivityIndicator size="large" color="#0aae4d" />
+        <ActivityIndicator size="large" color="#fff" />
       ) : (
         <>
           <Image
@@ -105,7 +105,7 @@ export const Login = () => {
             value={Password}
           />
           <LinearGradient
-            colors={['#005A9C', '#17175f']}
+            colors={['#fff', '#97a6e8']}
             style={[styles.buttonContainer, styles.elevation]}
             onTouchStart={handleLogin}>
             <TouchableOpacity>
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   buttonText: {
-    color: '#FFFFFF',
+    color: '#17175f',
     fontSize: 16,
     fontWeight: 'bold',
   },
