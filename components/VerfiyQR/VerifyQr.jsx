@@ -177,9 +177,10 @@ const VerifyQr = () => {
     if (!scanningEnabled) return;
 
     console.log('QR Code data:', event.data);
+    // Use .replace to remove unwanted quotes
     const [doctorId, ticketId] = event.data
       .split(',')
-      .map(value => value.trim());
+      .map(value => value.replace(/"/g, '').trim());
     setClickPic(false);
     console.log('Doctor ID:', doctorId);
     console.log('Ticket ID:', ticketId);
@@ -246,7 +247,7 @@ const VerifyQr = () => {
           [{text: 'OK', onPress: () => setClickPic(false)}],
         );
       } else {
-        Alert.alert('Error', data.errorDetail, [
+        Alert.alert('Error', 'An error occurred while verifying QR code', [
           {text: 'OK', onPress: () => setClickPic(false)},
         ]);
       }
